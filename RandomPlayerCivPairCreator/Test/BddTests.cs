@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using RandomPlayerCivPairCreator;
 using RandomPlayerCivPairCreator.Input;
 using RandomPlayerCivPairCreator.Model;
 using RandomPlayerCivPairCreator.Pairing;
@@ -13,12 +14,17 @@ namespace Test
     public class BddTests : IDisposable
     {
         private const string m_InputTestFile = @"D:\InputTestFile.json";
+        private const string m_OutputTestFile = @"D:\OutputTestFile.json";
 
         public void Dispose()
         {
             if (File.Exists(m_InputTestFile))
             {
                 File.Delete(m_InputTestFile);
+            }
+            if (File.Exists(m_OutputTestFile))
+            {
+                File.Delete(m_OutputTestFile);
             }
         }
 
@@ -77,7 +83,48 @@ namespace Test
             Assert.True(AreModelsEqual(initialModel, parsedModel));
         }
 
+        //Test_R1_UC3 - Read input and write pairs in output
+        //Given
+        //    a JSON file name as input
+        //    and the file with the following content
+        //    {
+        //    "Players": [
+        //    "Adam",
+        //    "Bela",
+        //    "Cecil"
+        //    ],
+        //    "Civs": [
+        //    "A",
+        //    "B",
+        //    "C",
+        //    "D",
+        //    "E",
+        //    "F"
+        //    ]
+        //    }
+        //When the application is executed
+        //Then the pairs are written in a file with JSON format
+        [Fact]
+        public void Test_R1_UC3()
+        {
+            //Given
+            PlayerCivPairModel initialModel = CreateTestModel();
+            File.WriteAllText(m_InputTestFile, JsonConvert.SerializeObject(initialModel, Formatting.Indented));
+            //When
+            Program.Main(new[] { m_InputTestFile, m_OutputTestFile });
+            //Then
+            Assert.True(CheckOutput(initialModel), "Output is not correct.");
+        }
+
         #region Private
+        private bool CheckOutput(PlayerCivPairModel initialModel)
+        {
+            initialModel.Pairs = JsonConvert.DeserializeObject<IDictionary<string, string>>(File.ReadAllText(m_OutputTestFile));
+            return
+                CheckAllPlayersIncluded(initialModel) &&
+                CheckValidVaulesOfPairs(initialModel);
+        }
+
         private bool AreModelsEqual(PlayerCivPairModel initialModel, PlayerCivPairModel parsedModel)
         {
             return
