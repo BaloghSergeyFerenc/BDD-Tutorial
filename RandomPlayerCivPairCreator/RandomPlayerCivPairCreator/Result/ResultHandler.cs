@@ -1,5 +1,5 @@
-﻿using RandomPlayerCivPairCreator.Model;
-using System;
+﻿using Newtonsoft.Json;
+using RandomPlayerCivPairCreator.Model;
 
 namespace RandomPlayerCivPairCreator.Result
 {
@@ -7,7 +7,7 @@ namespace RandomPlayerCivPairCreator.Result
     {
         public string Parse(PlayerCivPairModel model)
         {
-            throw new Exception();
+            return JsonConvert.SerializeObject(model.Pairs, Formatting.Indented);
         }
     }
 }
