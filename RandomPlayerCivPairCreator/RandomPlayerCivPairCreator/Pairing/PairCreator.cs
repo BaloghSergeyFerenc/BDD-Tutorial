@@ -1,5 +1,5 @@
 ﻿using RandomPlayerCivPairCreator.Model;
-using System;
+using System.Collections.Generic;
 
 namespace RandomPlayerCivPairCreator.Pairing
 {
@@ -14,7 +14,15 @@ namespace RandomPlayerCivPairCreator.Pairing
 
         public void Create(PlayerCivPairModel model)
         {
-            throw new Exception();
+            IList<string> ageofUsers = new List<string>(model.Players);
+
+            while (ageofUsers.Count != 0)
+            {
+                string player = ageofUsers[m_RandomGenerator.Generate(ageofUsers.Count)];
+                string civ = model.Civs[m_RandomGenerator.Generate(model.Civs.Count)];
+                model.Pairs[player] = civ;
+                ageofUsers.Remove(player);
+            }
         }
     }
 }
