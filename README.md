@@ -198,4 +198,4 @@ The most important elements in BDD based refinement are:
 
 	https://en.wikipedia.org/wiki/Behavior-driven_development
 
-<details>
+</details>
