@@ -1,5 +1,7 @@
-﻿using RandomPlayerCivPairCreator.Model;
-using System;
+﻿using Newtonsoft.Json;
+using RandomPlayerCivPairCreator.Model;
+using System.Collections.Generic;
+using System.IO;
 
 namespace RandomPlayerCivPairCreator.Input
 {
@@ -7,7 +9,9 @@ namespace RandomPlayerCivPairCreator.Input
     {
         public PlayerCivPairModel Parse(string input)
         {
-            throw new Exception();
+            PlayerCivPairModel playerCivPairModel = JsonConvert.DeserializeObject<PlayerCivPairModel>(File.ReadAllText(input));
+            playerCivPairModel.Pairs = new Dictionary<string, string>();
+            return playerCivPairModel;
         }
     }
 }
